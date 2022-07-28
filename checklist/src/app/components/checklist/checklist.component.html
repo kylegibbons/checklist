@@ -1,0 +1,41 @@
+<div *ngIf="checklist == undefined">
+  Loading Checklist...
+</div>
+
+<div *ngIf="checklist != undefined">
+
+
+  <h2>{{ checklist.name }}</h2>
+
+  <form [formGroup]="checklistForm">
+    <mat-accordion class="example-headers-align">
+      <div  *ngFor="let phase;let i=index; of checklist.phases">
+
+        <mat-expansion-panel [expanded]="i == activePhase" (opened)="setPhase(i)" hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <div *ngIf="i != activePhase">
+                {{ phase.name }}
+              </div>
+              <div *ngIf="i == activePhase">
+                <input type="text"  value="{{ phase.name }}" (click)="phaseTitleClick($event)" /> <button mat-mini-fab><mat-icon>check</mat-icon></button>
+              </div>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <div class="list">
+            <mat-selection-list [formControlName]="phase.id" (selectionChange)="selectionChange()">
+              <mat-list-option *ngFor="let item of phase.items" [value]="item.checked" >
+                <div class="list-item"><div class="task">{{ item.text }}</div><div class="buffer">&nbsp;</div><div class="resolution">{{ item.action }}</div></div>
+              </mat-list-option>
+            </mat-selection-list>
+          </div>
+        </mat-expansion-panel>
+        <div *ngIf="editMode">
+          Add Phase <button mat-fab color="primary" (click)="addPhase(i)"><mat-icon>add</mat-icon></button>
+        </div>
+      </div>
+    </mat-accordion>
+
+  </form>
+</div>
